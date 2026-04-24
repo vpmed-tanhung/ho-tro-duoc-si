@@ -109,47 +109,47 @@
     // 2. Danh sách các cụm từ "CẤM" xuất hiện trong tên thuốc (Loại bỏ hướng dẫn)
     const banList = ['UỐNG', 'NGÀY', 'LẦN', 'MỖI', 'SAU ĂN', 'TRƯỚC ĂN', 'SÁNG', 'TỐI', 'CHIA'];
 
-   lines.forEach(line => {
+  lines.forEach(line => {
     let l = line.trim().toUpperCase();
     
-    // 1. Chỉ nhận dòng có đơn vị tính và KHÔNG phải dòng chẩn đoán
-    const drugUnits = ['VIÊN', 'ỐNG', 'GÓI', 'CHAI', 'LỌ', 'MG', 'ML'];
+    // 1. NHẬN DIỆN DÒNG RÁC (Cần loại bỏ)
+    // Nếu dòng chứa chữ "UỐNG" hoặc "NGÀY" (kể cả có dấu phẩy đi kèm) -> BỎ QUA LUÔN
+    const isTrash = /UỐNG|NGÀY|LIỀU|MỖI|CHIA|SÁNG|TỐI|SAU ĂN/i.test(l);
     const isDiagnosis = /CHẨN ĐOÁN|KÈM THEO|BỆNH LÝ|ICD/i.test(l);
+
+    // 2. NHẬN DIỆN DÒNG THUỐC (Cần giữ lại)
+    const drugUnits = ['VIÊN', 'ỐNG', 'GÓI', 'CHAI', 'LỌ', 'MG', 'ML'];
     const hasUnit = drugUnits.some(unit => l.includes(unit));
 
-    if (hasUnit && !isDiagnosis && l.length > 5) {
-        // BƯỚC A: Cắt bỏ hoàn toàn từ các từ khóa hướng dẫn hoặc dấu phẩy/chấm thừa
-        // Thuật toán tìm vị trí xuất hiện sớm nhất của các từ rác để cắt
-        let splitIndex = l.search(/UỐNG|NGÀY|MỖI|LIỀU|SÁNG|CHIỀU|TỐI|SAU ĂN|TRƯỚC ĂN/i);
-        let cleanName = (splitIndex !== -1) ? line.substring(0, splitIndex) : line;
-
-        // BƯỚC B: Xóa số lượng thừa ở cuối (Ví dụ: "56 - Viên", "20 - Gói")
-        // Tìm và xóa cụm: [Khoảng trắng][Số][Dấu gạch/cách][Đơn vị tính]
-        cleanName = cleanName.replace(/\s+\d+\s*[-]\s*(Viên|Gói|Ống|Lọ|Chai|Mg|Ml).*$/i, "");
-        cleanName = cleanName.replace(/\s+\d+\s+(Viên|Gói|Ống|Lọ|Chai|Mg|Ml).*$/i, "");
-
-        // BƯỚC C: Dọn dẹp lỗi OCR đầu dòng (L, I, !, -)
-        cleanName = cleanName.trim().replace(/^[LI|!|\-|\d.]+\s*/i, "");
+    // CHỈ XỬ LÝ NẾU: Có đơn vị thuốc VÀ KHÔNG phải dòng rác/chẩn đoán
+    if (hasUnit && !isTrash && !isDiagnosis && l.length > 5) {
+        
+        // BƯỚC A: Xử lý số lượng thừa ở cuối (Ô VUÔNG ĐỎ)
+        // Cắt bỏ phần "56 - Viên" hoặc "20 Viên" ở cuối dòng
+        let cleanName = line.trim().replace(/\s*[-]*\s*\d+\s*(Viên|Gói|Ống|Lọ|Chai|Mg|Ml).*$/i, "");
+        
+        // BƯỚC B: Dọn rác đầu dòng (Các ký tự <, L, 1, -)
+        cleanName = cleanName.replace(/^[<|L|I|!|\-|\d.]+\s*/i, "");
 
         if (cleanName.length > 3) {
             let status = '<span class="text-green-600 font-bold">✓ PHÙ HỢP</span>';
-            let note = 'Chỉ định phù hợp với chẩn đoán mã bệnh.';
+            let note = 'Chỉ định phù hợp mã bệnh.';
 
-            // Đối soát mã ICD cho nhóm Statin
+            // Kiểm tra lâm sàng (Ví dụ nhóm mỡ máu)
             if (l.includes('ATOR') || l.includes('STATIN')) {
                 if (!uniqueICDs.some(c => c.startsWith('E78') || c.startsWith('I10'))) {
                     status = '<span class="text-red-600 font-bold">⚠ KIỂM TRA</span>';
-                    note = 'Cảnh báo: Thiếu mã ICD liên quan đến mỡ máu.';
+                    note = 'Thiếu mã ICD mỡ máu (E78).';
                 }
             }
 
             analysisHTML += `
-                <tr class="border-b border-slate-50">
+                <tr class="border-b border-slate-50 hover:bg-slate-50">
                     <td class="p-4">
-                        <div class="font-extrabold text-slate-800 text-[11px] uppercase tracking-tight">${cleanName.trim()}</div>
-                        <div class="text-[9px] text-slate-400 mt-0.5">● ${note}</div>
+                        <div class="font-bold text-slate-800 text-[11px] uppercase">${cleanName.trim()}</div>
+                        <div class="text-[9px] text-slate-400 mt-0.5 italic">● ${note}</div>
                     </td>
-                    <td class="p-4 text-center text-[10px] font-black">${status}</td>
+                    <td class="p-4 text-center text-[10px]">${status}</td>
                 </tr>`;
         }
     }
