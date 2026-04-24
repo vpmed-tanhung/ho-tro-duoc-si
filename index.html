@@ -16,15 +16,15 @@
 
     <header class="max-w-7xl mx-auto mb-6 bg-white p-5 rounded-3xl shadow-xl border-b-4 border-blue-900 flex justify-between items-center">
         <div class="flex items-center gap-5">
-            <img id="hosp-logo" src="https://i.imgur.com/K5mP8Fv.png" class="w-14 h-14 object-contain rounded-xl border p-1 bg-white">
+            <img id="hosp-logo" src="logo.png" class="w-14 h-14 object-contain rounded-xl border p-1 bg-white">
             <div>
                 <h1 class="font-black text-blue-900 uppercase text-xl">BỆNH VIỆN VPMED TÂN HƯNG</h1>
-                <p class="text-[10px] text-red-600 font-bold uppercase tracking-widest mt-1 italic">ĐỐI SOÁT ĐA NGUỒN ẢNH: ĐƠN THUỐC + BỆNH ÁN + TỜ ĐIỀU TRỊ</p>
+                <p class="text-[10px] text-red-600 font-bold uppercase tracking-widest mt-1 italic">Đối soát đa nguồn ảnh: Đơn thuốc + Bệnh án + Tờ điều trị</p>
             </div>
         </div>
         <div id="ai-status" class="hidden flex items-center gap-3 bg-blue-50 px-5 py-2 rounded-full border border-blue-200">
             <div class="animate-spin h-3 w-3 border-2 border-blue-600 border-t-transparent rounded-full"></div>
-            <span id="status-text" class="text-[10px] font-black text-blue-700 uppercase tracking-tighter">Đang xử lý dữ liệu...</span>
+            <span id="status-text" class="text-[10px] font-black text-blue-700 uppercase tracking-tighter">Đang xử lý...</span>
         </div>
     </header>
 
@@ -33,26 +33,26 @@
             <div onclick="document.getElementById('file-in').click()" class="bg-white border-2 border-dashed border-slate-300 rounded-[2rem] p-10 text-center hover:border-blue-600 transition-all cursor-pointer shadow-sm group">
                 <input type="file" id="file-in" class="hidden" accept="image/*" multiple onchange="handleFiles(this)">
                 <div class="text-5xl mb-3">📁</div>
-                <p class="font-black text-slate-500 text-[10px] uppercase underline">NHẤN ĐỂ TẢI NHIỀU ẢNH (ĐƠN + BỆNH ÁN)</p>
+                <p class="font-black text-slate-500 text-[10px] uppercase">NHẤN ĐỂ TẢI ẢNH ĐƠN THUỐC</p>
             </div>
             <div id="preview-container" class="grid grid-cols-2 gap-2"></div>
             <div class="bg-slate-900 rounded-[1.5rem] p-4 shadow-2xl">
                 <p class="text-[9px] font-black text-blue-400 mb-2 uppercase tracking-widest">DỮ LIỆU THÔ (OCR):</p>
-                <div id="raw-out" class="text-[9px] text-slate-500 h-28 overflow-y-auto font-mono border-t border-slate-800 pt-2 italic">Chưa có dữ liệu...</div>
+                <div id="raw-out" class="text-[9px] text-slate-500 h-28 overflow-y-auto font-mono border-t border-slate-800 pt-2 italic">...</div>
             </div>
         </div>
 
         <div class="lg:col-span-8 space-y-4">
             <div class="bg-white rounded-[2.5rem] shadow-2xl border border-slate-100 overflow-hidden flex flex-col min-h-[500px]">
                 <div class="bg-slate-900 p-4 text-white flex justify-between items-center shadow-lg">
-                    <span class="font-black text-[10px] uppercase tracking-[0.2em]">BÁO CÁO ĐỐI SOÁT TỔNG HỢP</span>
-                    <span class="text-[9px] bg-blue-600 px-3 py-1 rounded-full font-black uppercase tracking-tighter italic">V4.6 SECURE</span>
+                    <span class="font-black text-[10px] uppercase tracking-[0.2em]">BẢNG ĐỐI SOÁT CHUYÊN MÔN</span>
+                    <span class="text-[9px] bg-blue-600 px-3 py-1 rounded-full font-black uppercase tracking-tighter italic">VPMED V1.0</span>
                 </div>
                 <div id="analysis-zone" class="p-6 space-y-6">
-                    <p class="text-center py-40 text-slate-300 font-bold uppercase text-xs tracking-[0.2em]">Sẵn sàng phân tích dữ liệu đa nguồn...</p>
+                    <p class="text-center py-40 text-slate-300 font-bold uppercase text-xs tracking-[0.2em]">Đang chờ tải dữ liệu...</p>
                 </div>
             </div>
-            <button onclick="smartReset()" class="w-full py-4 bg-red-600 text-white font-black rounded-xl hover:bg-red-700 transition-all uppercase text-[10px] tracking-[0.4em] shadow-xl">XÓA DỮ LIỆU & QUÉT TIẾP</button>
+            <button onclick="smartReset()" class="w-full py-4 bg-red-600 text-white font-black rounded-xl hover:bg-red-700 transition-all uppercase text-[10px] tracking-[0.4em] shadow-xl">XÓA ĐƠN & QUÉT TIẾP</button>
         </div>
     </main>
 
@@ -61,8 +61,8 @@
         function smartReset() {
             allText = ""; processedCount = 0; totalFiles = 0;
             document.getElementById('preview-container').innerHTML = "";
-            document.getElementById('raw-out').innerText = "Chưa có dữ liệu...";
-            document.getElementById('analysis-zone').innerHTML = '<p class="text-center py-40 text-slate-300 font-bold uppercase text-xs tracking-[0.2em]">Sẵn sàng phân tích dữ liệu đa nguồn...</p>';
+            document.getElementById('raw-out').innerText = "...";
+            document.getElementById('analysis-zone').innerHTML = '<p class="text-center py-40 text-slate-300 font-bold uppercase text-xs tracking-[0.2em]">Đang chờ tải dữ liệu...</p>';
             document.getElementById('file-in').value = "";
         }
         async function handleFiles(input) {
@@ -79,14 +79,14 @@
                     document.getElementById('preview-container').appendChild(img);
                     await runOcr(e.target.result, file.name);
                 };
-                reader.readAsDataURL(file);
+                reader.readAsAsDataURL(file);
             }
         }
         async function runOcr(data, name) {
             const { data: { text } } = await Tesseract.recognize(data, 'vie');
             allText += `\n--- NGUỒN: ${name} ---\n` + text;
             processedCount++;
-            document.getElementById('status-text').innerText = `XỬ LÝ: ${processedCount}/${totalFiles}`;
+            document.getElementById('status-text').innerText = `ĐANG QUÉT: ${processedCount}/${totalFiles}`;
             if(processedCount === totalFiles) {
                 document.getElementById('raw-out').innerText = allText;
                 performAudit();
@@ -97,28 +97,22 @@
             const zone = document.getElementById('analysis-zone');
             const icdRegex = /[A-Z][0-9][0-9](\.[0-9])?/g;
             let foundCodes = raw.match(icdRegex) || [];
-            let uniqueICDs = [...new Set(foundCodes)].map(c => {
-                if(c.startsWith('L') && (c.includes('67') || c.includes('11'))) return c.replace('L', 'I');
-                return c;
-            });
+            let uniqueICDs = [...new Set(foundCodes)];
             const foundDrugs = allText.split('\n').filter(l => /^[0-9]{1,2}\s?[\.\-]\s?/.test(l.trim()));
             zone.innerHTML = `
                 <div class="p-5 bg-blue-50 rounded-2xl border border-blue-100">
-                    <p class="text-[10px] font-black text-blue-900 uppercase mb-4 italic">MÃ ICD-10 TÌM THẤY:</p>
+                    <p class="text-[10px] font-black text-blue-900 uppercase mb-4 italic">MÃ ICD-10 GHI NHẬN:</p>
                     <div class="flex flex-wrap gap-2">
-                        ${uniqueICDs.map(c => `<span class="icd-badge">${c}</span>`).join('') || '<span class="text-red-600 font-bold italic underline">KHÔNG TÌM THẤY MÃ BỆNH</span>'}
+                        ${uniqueICDs.map(c => `<span class="icd-badge">${c}</span>`).join('') || '<span class="text-red-600 font-bold">CHƯA TÌM THẤY MÃ</span>'}
                     </div>
                 </div>
                 <div class="rounded-2xl border-2 border-slate-100 overflow-hidden bg-white shadow-lg">
                     <table class="w-full text-[11px]">
                         <thead class="bg-slate-900 text-white">
-                            <tr>
-                                <th class="p-4 text-left font-black text-[9px] uppercase">DANH MỤC THUỐC TRÍCH XUẤT</th>
-                                <th class="p-4 text-center font-black text-[9px] uppercase w-40">TRẠNG THÁI</th>
-                            </tr>
+                            <tr><th class="p-4 text-left uppercase font-black text-[9px]">TÊN THUỐC ĐÃ TRÍCH XUẤT</th><th class="p-4 text-center uppercase font-black text-[9px]">TRẠNG THÁI</th></tr>
                         </thead>
                         <tbody class="divide-y divide-slate-50">
-                            ${foundDrugs.map(d => `<tr><td class="p-4 font-bold text-slate-800">${d.trim()}</td><td class="p-4 text-center text-green-600 font-black uppercase text-[10px]">✓ KHỚP MÃ</td></tr>`).join('')}
+                            ${foundDrugs.map(d => `<tr><td class="p-4 font-bold text-slate-800">${d.trim()}</td><td class="p-4 text-center text-green-600 font-black uppercase text-[10px]">✓ HỢP LỆ</td></tr>`).join('')}
                         </tbody>
                     </table>
                 </div>
