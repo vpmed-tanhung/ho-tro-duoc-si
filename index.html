@@ -2,28 +2,24 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Hệ thống Đối soát V4.4 - Fixed Template</title>
+    <title>Hệ thống Đối soát - BỆNH VIỆN VPMED TÂN HƯNG</title>
     <script src="https://unpkg.com/tesseract.js@4.0.2/dist/tesseract.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; font-size: 12px; }
         .icd-badge { background: #eff6ff; border: 1px solid #dbeafe; color: #1e40af; padding: 2px 8px; border-radius: 4px; font-family: monospace; font-weight: 700; }
-        /* Chỉ cho phép hiển thị khung sửa cho vùng tiêu đề */
-        .editable-header:hover { outline: 2px dashed #3b82f6; background: #f8fafc; border-radius: 4px; }
+        [contenteditable="true"] { pointer-events: none; } 
     </style>
 </head>
 <body class="p-4 lg:p-6">
 
     <header class="max-w-7xl mx-auto mb-6 bg-white p-5 rounded-3xl shadow-xl border-b-4 border-blue-900 flex justify-between items-center">
         <div class="flex items-center gap-5">
-            <div class="relative group cursor-pointer" onclick="document.getElementById('logo-in').click()">
-                <img id="hosp-logo" src="https://i.imgur.com/K5mP8Fv.png" class="w-14 h-14 object-contain rounded-xl border p-1 bg-white">
-                <input type="file" id="logo-in" class="hidden" accept="image/*" onchange="updateLogo(this)">
-            </div>
+            <img id="hosp-logo" src="https://i.imgur.com/K5mP8Fv.png" class="w-14 h-14 object-contain rounded-xl border p-1 bg-white">
             <div>
-                <h1 contenteditable="true" id="hosp-name" class="editable-header font-black text-blue-900 uppercase text-xl outline-none">BV ĐA KHOA TỈNH HẢI DƯƠNG</h1>
-                <p contenteditable="true" id="hosp-sub" class="editable-header text-[10px] text-red-600 font-bold uppercase tracking-widest mt-1 italic">Đối soát đa nguồn ảnh: Đơn thuốc + Bệnh án + Tờ điều trị</p>
+                <h1 class="font-black text-blue-900 uppercase text-xl">BỆNH VIỆN VPMED TÂN HƯNG</h1>
+                <p class="text-[10px] text-red-600 font-bold uppercase tracking-widest mt-1 italic">ĐỐI SOÁT ĐA NGUỒN ẢNH: ĐƠN THUỐC + BỆNH ÁN + TỜ ĐIỀU TRỊ</p>
             </div>
         </div>
         <div id="ai-status" class="hidden flex items-center gap-3 bg-blue-50 px-5 py-2 rounded-full border border-blue-200">
@@ -34,54 +30,41 @@
 
     <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
         <div class="lg:col-span-4 space-y-4">
-            <div id="drop-zone" onclick="document.getElementById('file-in').click()" class="bg-white border-2 border-dashed border-slate-300 rounded-[2rem] p-10 text-center hover:border-blue-600 transition-all cursor-pointer shadow-sm">
+            <div onclick="document.getElementById('file-in').click()" class="bg-white border-2 border-dashed border-slate-300 rounded-[2rem] p-10 text-center hover:border-blue-600 transition-all cursor-pointer shadow-sm group">
                 <input type="file" id="file-in" class="hidden" accept="image/*" multiple onchange="handleFiles(this)">
                 <div class="text-5xl mb-3">📁</div>
-                <p class="font-black text-slate-500 text-[10px] uppercase underline">TẢI NHIỀU ẢNH (ĐƠN + BỆNH ÁN)</p>
+                <p class="font-black text-slate-500 text-[10px] uppercase underline">NHẤN ĐỂ TẢI NHIỀU ẢNH (ĐƠN + BỆNH ÁN)</p>
             </div>
             <div id="preview-container" class="grid grid-cols-2 gap-2"></div>
             <div class="bg-slate-900 rounded-[1.5rem] p-4 shadow-2xl">
-                <p class="text-[9px] font-black text-blue-400 mb-2 uppercase tracking-widest">NHẬT KÝ VĂN BẢN (OCR):</p>
-                <div id="raw-out" class="text-[9px] text-slate-500 h-28 overflow-y-auto font-mono border-t border-slate-800 pt-2 italic">Dữ liệu thô...</div>
+                <p class="text-[9px] font-black text-blue-400 mb-2 uppercase tracking-widest">DỮ LIỆU THÔ (OCR):</p>
+                <div id="raw-out" class="text-[9px] text-slate-500 h-28 overflow-y-auto font-mono border-t border-slate-800 pt-2 italic">Chưa có dữ liệu...</div>
             </div>
         </div>
 
         <div class="lg:col-span-8 space-y-4">
             <div class="bg-white rounded-[2.5rem] shadow-2xl border border-slate-100 overflow-hidden flex flex-col min-h-[500px]">
                 <div class="bg-slate-900 p-4 text-white flex justify-between items-center shadow-lg">
-                    <span class="font-black text-[10px] uppercase tracking-[0.2em]">BÁO CÁO ĐỐI SOÁT TỔNG HỢP (FIXED)</span>
-                    <span class="text-[9px] bg-blue-600 px-3 py-1 rounded-full font-black uppercase tracking-tighter italic">V4.4 STABLE</span>
+                    <span class="font-black text-[10px] uppercase tracking-[0.2em]">BÁO CÁO ĐỐI SOÁT TỔNG HỢP</span>
+                    <span class="text-[9px] bg-blue-600 px-3 py-1 rounded-full font-black uppercase tracking-tighter italic">V4.6 SECURE</span>
                 </div>
                 <div id="analysis-zone" class="p-6 space-y-6">
-                    <p class="text-center py-40 text-slate-300 font-bold uppercase text-xs tracking-[0.2em]">Sẵn sàng phân tích chuyên môn...</p>
+                    <p class="text-center py-40 text-slate-300 font-bold uppercase text-xs tracking-[0.2em]">Sẵn sàng phân tích dữ liệu đa nguồn...</p>
                 </div>
             </div>
-
-            <div id="ins-suggestion" class="hidden bg-amber-50 p-5 rounded-[2rem] border-l-8 border-amber-500 shadow-xl">
-                <h3 class="text-amber-900 font-black text-xs uppercase mb-2 italic">Gợi ý khớp mã từ tài liệu khác:</h3>
-                <div id="sug-list" class="text-[11px] font-bold text-amber-800 leading-relaxed"></div>
-            </div>
-
-            <button onclick="smartReset()" class="w-full py-4 bg-red-600 text-white font-black rounded-xl hover:bg-red-700 transition-all uppercase text-[10px] tracking-[0.4em] shadow-xl">
-                XÓA DỮ LIỆU ĐƠN (TIÊU ĐỀ KHÓA)
-            </button>
+            <button onclick="smartReset()" class="w-full py-4 bg-red-600 text-white font-black rounded-xl hover:bg-red-700 transition-all uppercase text-[10px] tracking-[0.4em] shadow-xl">XÓA DỮ LIỆU & QUÉT TIẾP</button>
         </div>
     </main>
 
     <script>
         let allText = ""; let processedCount = 0; let totalFiles = 0;
-
         function smartReset() {
             allText = ""; processedCount = 0; totalFiles = 0;
             document.getElementById('preview-container').innerHTML = "";
-            document.getElementById('raw-out').innerText = "Dữ liệu thô...";
-            document.getElementById('analysis-zone').innerHTML = '<p class="text-center py-40 text-slate-300 font-bold uppercase text-xs tracking-[0.2em]">Sẵn sàng phân tích chuyên môn...</p>';
-            document.getElementById('ins-suggestion').classList.add('hidden');
+            document.getElementById('raw-out').innerText = "Chưa có dữ liệu...";
+            document.getElementById('analysis-zone').innerHTML = '<p class="text-center py-40 text-slate-300 font-bold uppercase text-xs tracking-[0.2em]">Sẵn sàng phân tích dữ liệu đa nguồn...</p>';
             document.getElementById('file-in').value = "";
         }
-
-        function updateLogo(input) { const r = new FileReader(); r.onload = (e) => { document.getElementById('hosp-logo').src = e.target.result; }; r.readAsDataURL(input.files[0]); }
-
         async function handleFiles(input) {
             const files = Array.from(input.files);
             if(files.length === 0) return;
@@ -99,18 +82,16 @@
                 reader.readAsDataURL(file);
             }
         }
-
         async function runOcr(data, name) {
             const { data: { text } } = await Tesseract.recognize(data, 'vie');
             allText += `\n--- NGUỒN: ${name} ---\n` + text;
             processedCount++;
-            document.getElementById('status-text').innerText = `ĐANG XỬ LÝ: ${processedCount}/${totalFiles}`;
+            document.getElementById('status-text').innerText = `XỬ LÝ: ${processedCount}/${totalFiles}`;
             if(processedCount === totalFiles) {
                 document.getElementById('raw-out').innerText = allText;
                 performAudit();
             }
         }
-
         function performAudit() {
             const raw = allText.toUpperCase();
             const zone = document.getElementById('analysis-zone');
@@ -121,20 +102,19 @@
                 return c;
             });
             const foundDrugs = allText.split('\n').filter(l => /^[0-9]{1,2}\s?[\.\-]\s?/.test(l.trim()));
-
             zone.innerHTML = `
                 <div class="p-5 bg-blue-50 rounded-2xl border border-blue-100">
-                    <p class="text-[10px] font-black text-blue-900 uppercase mb-4 italic">MÃ ICD-10 TỔNG HỢP ĐƯỢC:</p>
+                    <p class="text-[10px] font-black text-blue-900 uppercase mb-4 italic">MÃ ICD-10 TÌM THẤY:</p>
                     <div class="flex flex-wrap gap-2">
-                        ${uniqueICDs.map(c => `<span class="icd-badge">${c}</span>`).join('') || '<span class="text-red-600 font-bold">CHƯA CÓ MÃ BỆNH</span>'}
+                        ${uniqueICDs.map(c => `<span class="icd-badge">${c}</span>`).join('') || '<span class="text-red-600 font-bold italic underline">KHÔNG TÌM THẤY MÃ BỆNH</span>'}
                     </div>
                 </div>
                 <div class="rounded-2xl border-2 border-slate-100 overflow-hidden bg-white shadow-lg">
                     <table class="w-full text-[11px]">
                         <thead class="bg-slate-900 text-white">
                             <tr>
-                                <th class="p-4 text-left uppercase tracking-widest font-black text-[9px]">DANH MỤC THUỐC ĐÃ QUÉT</th>
-                                <th class="p-4 text-center uppercase tracking-widest font-black text-[9px] w-40">KẾT QUẢ</th>
+                                <th class="p-4 text-left font-black text-[9px] uppercase">DANH MỤC THUỐC TRÍCH XUẤT</th>
+                                <th class="p-4 text-center font-black text-[9px] uppercase w-40">TRẠNG THÁI</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-50">
