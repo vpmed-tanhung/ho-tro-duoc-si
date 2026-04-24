@@ -97,20 +97,18 @@
             const raw = allText.toUpperCase();
             const zone = document.getElementById('analysis-zone');
             
-            // THUẬT TOÁN MỚI: Quét mã ICD-10 linh hoạt hơn
-            const icdRegex = /[A-Z][0-9]{2}(\.[0-9])?/g;
-            let uniqueICDs = [...new Set(raw.match(icdRegex) || [])];
-
-            // THUẬT TOÁN MỚI: Nhận diện thuốc thông minh hơn
-            // Lấy các dòng có chứa đơn vị tính thuốc phổ biến hoặc bắt đầu bằng số/gạch đầu dòng
-            const drugKeywords = ['VIÊN', 'ỐNG', 'GÓI', 'CHAI', 'LỌ', 'MG', 'ML'];
-            const lines = allText.split('\n');
-            const foundDrugs = lines.filter(line => {
-                const l = line.trim().toUpperCase();
-                const hasKeyword = drugKeywords.some(key => l.includes(key));
-                const startsWithMarker = /^[0-9*+\-•]/.test(l);
-                return (hasKeyword || startsWithMarker) && l.length > 5;
-            });
+           // THUẬT TOÁN NHẬN DIỆN THUỐC CẢI TIẾN V5.1
+const drugKeywords = ['VIÊN', 'ỐNG', 'GÓI', 'CHAI', 'LỌ', 'MG', 'ML', 'UỐNG'];
+const lines = allText.split('\n');
+const foundDrugs = lines.filter(line => {
+    const l = line.trim().toUpperCase();
+    // Chấp nhận dòng bắt đầu bằng Số HOẶC các ký tự OCR hay nhầm (L, I, |, !)
+    const startsWithMarker = /^[0-9*+\-•LI|!]/.test(l);
+    // Kiểm tra xem dòng có chứa đơn vị tính thuốc không
+    const hasDrugUnit = drugKeywords.some(key => l.includes(key));
+    
+    return (startsWithMarker && hasDrugUnit && l.length > 5);
+});
 
             zone.innerHTML = `
                 <div class="p-5 bg-blue-50 rounded-2xl border border-blue-100">
